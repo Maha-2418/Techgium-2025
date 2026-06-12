@@ -1,0 +1,19 @@
+--- Test 1: Need high tensile strength and good corrosion resistance ---
+I found multiple suitable materials (LM 4 and LM 25) with similar suitability.
+Do you prioritize strength, corrosion resistance, hardness, or temperature performance?
+
+--- Test 2: Need good strength ---
+Recommended Material: LM 4
+
+Reason:
+- Matches high Corrosion Resistance
+- Matches high Tensile Strength
+
+Alternative Materials:
+1. LM 25
+2. LM 13
+
+Engineering Suggestion:
+- If higher hardness required, consider heat treatment.
+- If corrosion priority increases, choose alternative alloy.
+

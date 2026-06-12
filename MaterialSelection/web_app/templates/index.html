@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlloyMind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h2>AlloyMind</h2>
+                    <p>Engineering Assistant</p>
+                    <div class="status-indicator" style="margin-top:10px; font-size: 0.7rem;">● Online</div>
+                </div>
+                <button id="theme-toggle" style="background: transparent; padding: 5px; color: var(--text-secondary);"
+                    title="Toggle Theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="scrolly-content">
+                <div class="category">
+                    <h3>Mechanical</h3>
+                    <div class="control-group">
+                        <label>Tensile Strength</label>
+                        <select onchange="updateRequirement('Tensile Strength', this.value)">
+                            <option value="">Select...</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Hardness</label>
+                        <select onchange="updateRequirement('Hardness', this.value)">
+                            <option value="">Select...</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>Resistance</h3>
+                    <div class="control-group">
+                        <label>Corrosion</label>
+                        <select onchange="updateRequirement('Corrosion Resistance', this.value)">
+                            <option value="">Select...</option>
+                            <option value="High">Good</option>
+                            <option value="Medium">Moderate</option>
+                            <option value="Low">Poor</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Temperature</label>
+                        <select onchange="updateRequirement('Temperature Resistance', this.value)">
+                            <option value="">Select...</option>
+                            <option value="High">Good</option>
+                            <option value="Medium">Moderate</option>
+                            <option value="Low">Poor</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Environment</label>
+                        <select onchange="updateRequirement('Environmental Resistance', this.value)">
+                            <option value="">Select...</option>
+                            <option value="High">Good</option>
+                            <option value="Medium">Moderate</option>
+                            <option value="Low">Poor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>Manufacturing Process</h3>
+                    <span class="tag" onclick="setInput('process:Sand Casting')">Sand Casting</span>
+                    <span class="tag" onclick="setInput('process:Gravity Casting')">Gravity Die</span>
+                    <span class="tag" onclick="setInput('process:Pressure Die Casting')">Pressure Die</span>
+                </div>
+
+                <div class="category">
+                    <h3>Note</h3>
+                    <p style="font-size: 0.8rem; color: #94a3b8;">
+                        Use dropdowns to specify property levels.
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <div class="chat-container" id="chat-container">
+                <div class="message system">
+                    Hello! Configure material properties using the sidebar options or describe your requirements below.
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Describe requirements..." autocomplete="off">
+                <button id="send-btn">Analyze</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Template for Recommendation Card -->
+    <template id="recommendation-template">
+        <div class="message system result-card">
+            <div class="card-header">
+                <div style="flex: 1;">
+                    <h3>Recommended: <span class="material-name"></span></h3>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">
+                        Standard: <span class="material-standard"
+                            style="color: var(--text-primary); font-weight: 500;"></span> |
+                        Sustainability: <span class="material-sustainability"
+                            style="color: var(--success); font-weight: 500;"></span>
+                    </div>
+                </div>
+                <span class="score-badge">Matches Requirements</span>
+            </div>
+            <div class="card-body">
+
+
+                <div class="research-section hidden">
+                    <div class="research-justification-card">
+                        <div class="research-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            <span>Research Justification</span>
+                        </div>
+                        <div class="research-content"></div>
+                    </div>
+                </div>
+                    <h4>Alternatives</h4>
+                    <div class="alternatives-container"></div>
+                </div>
+
+                <div class="applications-section">
+                    <h4>Common Applications</h4>
+                    <ul class="applications-list"></ul>
+                </div>
+
+
+
+                <div class="details-section">
+                    <button class="toggle-details">View Properties</button>
+                    <div class="properties-grid hidden"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
